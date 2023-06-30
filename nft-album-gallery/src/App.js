@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -16,10 +15,63 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Web3 from 'web3';
+import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
 
 
-
-
+const GET_DATA = gql`
+  query GetData {
+    approvals {
+      id
+      owner
+      approved
+      tokenId
+      blockNumber
+      blockTimestamp
+      transactionHash
+    }
+    approvalForAlls {
+      id
+      owner
+      operator
+      approved
+      blockNumber
+      blockTimestamp
+      transactionHash
+    }
+    batchMetadataUpdates {
+      id
+      _fromTokenId
+      _toTokenId
+      blockNumber
+      blockTimestamp
+      transactionHash
+    }
+    createdNFTs {
+      id
+      tokenId
+      tokenURI
+      blockNumber
+      blockTimestamp
+      transactionHash
+    }
+    metadataUpdates {
+      id
+      _tokenId
+      blockNumber
+      blockTimestamp
+      transactionHash
+    }
+    transfers {
+      id
+      from
+      to
+      tokenId
+      blockNumber
+      blockTimestamp
+      transactionHash
+    }
+  }
+`;
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -41,6 +93,24 @@ const defaultTheme = createTheme();
 export default function App() {
   const [isWalletConnected, setWalletConnected] = useState(false);
   const [connectedAccount, setConnectedAccount] = useState('');
+  const { loading, error, data } = useQuery(GET_DATA);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const {
+    approvals,
+    approvalForAlls,
+    batchMetadataUpdates,
+    createdNFTs,
+    metadataUpdates,
+    transfers,
+  } = data;
 
   async function connectWallet() {
 

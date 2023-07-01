@@ -142,7 +142,10 @@ export default function App() {
       console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
     }
   }
-
+  function swapIPFSUrl(url) {
+   return url.replaceAll("https://ipfs.io/", "turquoise-naughty-quail-179.mypinata.cloud/");
+    //  return  urljson.image.replaceAll("https://ipfs.io/ipfs", "turquoise-naughty-quail-179.mypinata.cloud")
+  }
   function handleConnectWallet() {
     if (isWalletConnected) {
       setWalletConnected(false);
@@ -154,6 +157,7 @@ export default function App() {
   
   function renderNFTCards() {
     return createdNFTs.map((nft) => (
+      
       <Grid item key={nft.id} xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardMedia
@@ -162,7 +166,7 @@ export default function App() {
               // 16:9
               pt: '56.25%',
             }}
-            image={nft.tokenURI}
+            image={swapIPFSUrl(nft.tokenURI)}
           />
           <CardContent sx={{ flexGrow: 1 }}>
             <Typography gutterBottom variant="h5" component="h2">

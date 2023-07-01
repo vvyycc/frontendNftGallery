@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -15,7 +15,7 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Web3 from 'web3';
-import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 
 
 const GET_DATA = gql`
@@ -86,15 +86,21 @@ function Copyright() {
   );
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
-
 export default function App() {
+  const baseURL = " https://turquoise-naughty-quail-179.mypinata.cloud/ipfs/QmcDZbSmnc5DFuQSYgiGwZSAKqxJoFNqPexLR7SRUsvsd5/";
+  const [arrayImages, setArrayImages] = useState([]);
   const [isWalletConnected, setWalletConnected] = useState(false);
   const [connectedAccount, setConnectedAccount] = useState('');
   const { loading, error, data } = useQuery(GET_DATA);
+
+
+  useEffect(() => {
+   
+    fetchImages();
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -132,9 +138,8 @@ export default function App() {
         await setWalletConnected(true);
         await setConnectedAccount(connectedAccount);
         console.log('Connected account:', connectedAccount);
-        debugger;
-        renderNFTCards();
-        
+
+
       } catch (error) {
         console.error('Error connecting with MetaMask:', error);
       }
@@ -142,10 +147,7 @@ export default function App() {
       console.error('MetaMask not detected. Please install MetaMask to connect your wallet.');
     }
   }
-  function swapIPFSUrl(url) {
-   return url.replaceAll("https://ipfs.io/", "turquoise-naughty-quail-179.mypinata.cloud/");
-    //  return  urljson.image.replaceAll("https://ipfs.io/ipfs", "turquoise-naughty-quail-179.mypinata.cloud")
-  }
+
   function handleConnectWallet() {
     if (isWalletConnected) {
       setWalletConnected(false);
@@ -154,10 +156,21 @@ export default function App() {
       connectWallet();
     }
   }
+  async function fetchImages() {
+    const imageUrls = [];
+
+    for (let i = 1; i <= 7; i++) {
+      const imageUrl = `${baseURL}${i}.json`;
+      imageUrls.push(imageUrl);
+     
+    }
   
+    setArrayImages(imageUrls);
+  }
   function renderNFTCards() {
-    return createdNFTs.map((nft) => (
-      
+    return createdNFTs.map((nft, index) => (
+      console.log(nft),
+      console.log(arrayImages),
       <Grid item key={nft.id} xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardMedia
@@ -166,11 +179,11 @@ export default function App() {
               // 16:9
               pt: '56.25%',
             }}
-            image={swapIPFSUrl(nft.tokenURI)}
+            key={index} src={arrayImages[index]}
           />
           <CardContent sx={{ flexGrow: 1 }}>
             <Typography gutterBottom variant="h5" component="h2">
-              NFT #{nft.tokenId}
+              NFT # {nft.tokenId}
             </Typography>
             <Typography>{nft.tokenURI}</Typography>
           </CardContent>
@@ -239,36 +252,7 @@ export default function App() {
         <Container sx={{ py: 8 }} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {/* {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
-                  <CardMedia
-                    component="div"
-                    sx={{
-                      // 16:9
-                      pt: '56.25%',
-                    }}
-                    image="https://source.unsplash.com/random?wallpapers"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Heading
-                    </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe the
-                      content.
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))} */}
-            {renderNFTCards()}
+            {isWalletConnected && (renderNFTCards())}
           </Grid>
         </Container>
       </main>

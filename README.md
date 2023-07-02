@@ -1,6 +1,5 @@
 # React NFT Collection App
 
-
 This is a React-based NFT collection application that displays a collection of NFTs related to the topic of forests. It fetches data from an Apollo GraphQL server and uses the Material-UI library for the user interface.
 
 Prerequisites
@@ -54,8 +53,6 @@ Transfers
 Contributing
 Contributions are welcome! If you find any issues or would like to add new features, feel free to submit a pull request.
 
-License
-This project is licensed under the MIT License.
 
 This project was bootstrapped with Create React App.
 

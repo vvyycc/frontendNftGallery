@@ -1,6 +1,6 @@
-# frontendNftGallery
+# React NFT Collection App
 
-React NFT Collection App
+
 This is a React-based NFT collection application that displays a collection of NFTs related to the topic of forests. It fetches data from an Apollo GraphQL server and uses the Material-UI library for the user interface.
 
 Prerequisites

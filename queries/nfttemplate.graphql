@@ -1,0 +1,57 @@
+query {
+  approvals {
+    id
+    owner
+    approved
+    tokenId
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+
+  approvalForAlls {
+    id
+    owner
+    operator
+    approved
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+
+  batchMetadataUpdates {
+    id
+    _fromTokenId
+    _toTokenId
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+
+  createdNFTs {
+    id
+    tokenId
+    tokenURI
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+
+  metadataUpdates {
+    id
+    _tokenId
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+
+  transfers {
+    id
+    from
+    to
+    tokenId
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+}

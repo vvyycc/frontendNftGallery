@@ -156,7 +156,7 @@ export default function App() {
   function fetchImages() {
     const imageUrls = [];
 
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= createdNFTs.length; i++) {
       const imageUrl = `${baseURL}${i}.jpg`;
       imageUrls.push(imageUrl);
 

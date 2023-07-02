@@ -90,17 +90,12 @@ function Copyright() {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 export default function App() {
-  const baseURL = " https://turquoise-naughty-quail-179.mypinata.cloud/ipfs/QmcDZbSmnc5DFuQSYgiGwZSAKqxJoFNqPexLR7SRUsvsd5/";
-  const [arrayImages, setArrayImages] = useState([]);
+  const baseURL = "https://gateway.pinata.cloud/ipfs/QmcDZbSmnc5DFuQSYgiGwZSAKqxJoFNqPexLR7SRUsvsd5/";
   const [isWalletConnected, setWalletConnected] = useState(false);
   const [connectedAccount, setConnectedAccount] = useState('');
   const { loading, error, data } = useQuery(GET_DATA);
 
 
-  useEffect(() => {
-   
-    fetchImages();
-  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -156,21 +151,24 @@ export default function App() {
       connectWallet();
     }
   }
-  async function fetchImages() {
+  
+  
+  function fetchImages() {
     const imageUrls = [];
 
     for (let i = 1; i <= 7; i++) {
-      const imageUrl = `${baseURL}${i}.json`;
+      const imageUrl = `${baseURL}${i}.jpg`;
       imageUrls.push(imageUrl);
-     
+
     }
-  
-    setArrayImages(imageUrls);
+
+    return imageUrls;
   }
+  
   function renderNFTCards() {
-    return createdNFTs.map((nft, index) => (
-      console.log(nft),
-      console.log(arrayImages),
+    const imageUrls = fetchImages();
+    const nftArray = toArrayAndSort();
+    return nftArray.map((nft, index) => (
       <Grid item key={nft.id} xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <CardMedia
@@ -179,18 +177,15 @@ export default function App() {
               // 16:9
               pt: '56.25%',
             }}
-            key={index} src={arrayImages[index]}
+            key={nft.id}
+            image={imageUrls[index]}
           />
           <CardContent sx={{ flexGrow: 1 }}>
             <Typography gutterBottom variant="h5" component="h2">
-              NFT # {nft.tokenId}
+              NFT #{nft.tokenId}
             </Typography>
-            <Typography>{nft.tokenURI}</Typography>
           </CardContent>
-          <CardActions>
-            <Button size="small">View</Button>
-            <Button size="small">Edit</Button>
-          </CardActions>
+         
         </Card>
       </Grid>
     ));
@@ -231,12 +226,10 @@ export default function App() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+             Collection NFT
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Something short and leading about the collection below—its contents,
-              the creator, etc. Make it short and sweet, but not too short so folks
-              don&apos;t simply skip over it entirely.
+             The topics of this collection is about the forest 
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -244,8 +237,6 @@ export default function App() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained">Main call to action</Button>
-              <Button variant="outlined">Secondary action</Button>
             </Stack>
           </Container>
         </Box>
@@ -274,4 +265,10 @@ export default function App() {
       {/* End footer */}
     </ThemeProvider>
   );
+
+  function toArrayAndSort() {
+    const nftArray = Array.from(createdNFTs);
+    nftArray.sort((a, b) => a.tokenId - b.tokenId);
+    return nftArray;
+  }
 }
